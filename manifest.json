@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Sound Booster",
+  "description": "Boost audio for the current Chrome tab.",
+  "version": "0.1.0",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "activeTab",
+    "offscreen",
+    "storage",
+    "tabCapture"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tab Sound Booster"
+  },
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  }
+}
