@@ -3,7 +3,10 @@ const gainNumber = document.querySelector("#gainNumber");
 const gainValue = document.querySelector("#gainValue");
 const toggleButton = document.querySelector("#toggle");
 const message = document.querySelector("#message");
+const meterValue = document.querySelector("#meterValue");
 const statusDot = document.querySelector("#statusDot");
+const statusPill = document.querySelector("#statusPill");
+const statusText = document.querySelector("#statusText");
 const tabTitle = document.querySelector("#tabTitle");
 
 let activeTabId = null;
@@ -12,6 +15,13 @@ let state = { active: false, gain: Number(gainInput.value) };
 init();
 
 async function init() {
+  if (!globalThis.chrome?.tabs) {
+    activeTabId = 123;
+    tabTitle.textContent = "Preview tab - Tab 123";
+    render();
+    return;
+  }
+
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   activeTabId = tab?.id ?? null;
   tabTitle.textContent = tab?.title
@@ -67,9 +77,13 @@ function render() {
   gainInput.value = String(state.gain);
   gainNumber.value = state.gain.toFixed(1);
   gainValue.value = `${state.gain.toFixed(1)}x`;
-  toggleButton.textContent = state.active ? "Stop" : "Start";
+  meterValue.textContent = state.gain.toFixed(1);
+  document.documentElement.style.setProperty("--progress", `${((state.gain - 1) / 4) * 100}%`);
+  toggleButton.querySelector("span:last-child").textContent = state.active ? "Stop boosting" : "Start boosting";
   toggleButton.classList.toggle("secondary", state.active);
   statusDot.classList.toggle("active", state.active);
+  statusPill.classList.toggle("active", state.active);
+  statusText.textContent = state.active ? "Live" : "Idle";
   setMessage(
     state.active
       ? `Boosting only Tab ${activeTabId}. Other tabs keep their own values.`
@@ -104,6 +118,13 @@ function clampGain(gain) {
 }
 
 function sendToServiceWorker(payload) {
+  if (!globalThis.chrome?.runtime) {
+    return Promise.resolve({
+      active: payload.type === "START_BOOST" ? true : state.active,
+      gain: payload.gain ?? state.gain
+    });
+  }
+
   return chrome.runtime.sendMessage(payload).then((response) => {
     if (response?.error) {
       throw new Error(response.error);

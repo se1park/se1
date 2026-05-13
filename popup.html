@@ -9,17 +9,42 @@
   <body>
     <main class="popup">
       <header class="header">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <span></span>
+          </div>
+          <div>
+            <span class="eyebrow">Current tab audio</span>
+            <h1>Tab Sound Booster</h1>
+          </div>
+        </div>
+        <div id="statusPill" class="status-pill">
+          <span id="statusDot" class="status-dot" aria-hidden="true"></span>
+          <span id="statusText">Idle</span>
+        </div>
+      </header>
+
+      <section class="tab-card" aria-label="Selected tab">
         <div>
-          <h1>Tab Sound Booster</h1>
+          <span class="section-label">Selected tab</span>
           <p id="tabTitle">Current tab</p>
         </div>
-        <span id="statusDot" class="status-dot" aria-hidden="true"></span>
-      </header>
+      </section>
+
+      <section class="meter" aria-label="Boost amount">
+        <div>
+          <span class="section-label">Boost level</span>
+          <output id="gainValue" for="gain">2.0x</output>
+        </div>
+        <div class="meter-ring" aria-hidden="true">
+          <span id="meterValue">2.0</span>
+        </div>
+      </section>
 
       <section class="control">
         <div class="gain-row">
-          <label for="gain">Boost</label>
-          <output id="gainValue" for="gain">2.0x</output>
+          <label for="gain">Fine tune</label>
+          <span class="range-label">1x to 5x</span>
         </div>
         <div class="gain-controls">
           <input id="gain" type="range" min="1" max="5" step="0.1" value="2">
@@ -31,7 +56,10 @@
       </section>
 
       <div class="actions">
-        <button id="toggle" type="button">Start</button>
+        <button id="toggle" type="button">
+          <span class="button-icon" aria-hidden="true"></span>
+          <span>Start</span>
+        </button>
       </div>
 
       <p id="message" class="message" role="status"></p>
