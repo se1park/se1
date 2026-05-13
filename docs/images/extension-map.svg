@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Tab Sound Booster extension map</title>
+  <desc id="desc">A visual map of the Chrome extension files and how audio moves through them.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#0f766e"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .card { fill: #ffffff; stroke: #d9e0e7; stroke-width: 2; filter: url(#shadow); }
+      .title { font: 700 42px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .subtitle { font: 400 20px Arial, Helvetica, sans-serif; fill: #607080; }
+      .label { font: 700 24px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .body { font: 400 17px Arial, Helvetica, sans-serif; fill: #405061; }
+      .file { font: 700 17px Consolas, monospace; fill: #0f766e; }
+      .arrow { stroke: #0f766e; stroke-width: 5; fill: none; marker-end: url(#arrow); }
+      .badge { fill: #ccfbf1; stroke: #0f766e; stroke-width: 2; }
+      .badgeText { font: 700 16px Arial, Helvetica, sans-serif; fill: #0f766e; }
+    </style>
+  </defs>
+  <rect class="bg" width="1280" height="720"/>
+  <text class="title" x="56" y="72">Tab Sound Booster: What each part does</text>
+  <text class="subtitle" x="56" y="106">The popup controls one tab, the service worker routes commands, and the offscreen page boosts the audio.</text>
+
+  <rect class="card" x="58" y="170" width="300" height="260" rx="12"/>
+  <text class="label" x="90" y="220">Popup UI</text>
+  <text class="file" x="90" y="254">popup.html</text>
+  <text class="file" x="90" y="280">popup.css</text>
+  <text class="file" x="90" y="306">popup.js</text>
+  <text class="body" x="90" y="350">Start / stop button</text>
+  <text class="body" x="90" y="376">Slider and number input</text>
+  <text class="body" x="90" y="402">Shows current tab state</text>
+
+  <rect class="card" x="490" y="170" width="300" height="260" rx="12"/>
+  <text class="label" x="522" y="220">Service Worker</text>
+  <text class="file" x="522" y="254">service_worker.js</text>
+  <text class="body" x="522" y="298">Gets the target tab ID</text>
+  <text class="body" x="522" y="324">Creates tab capture stream ID</text>
+  <text class="body" x="522" y="350">Stores state per tab</text>
+  <text class="body" x="522" y="376">Sets ON badge per tab</text>
+
+  <rect class="card" x="922" y="170" width="300" height="260" rx="12"/>
+  <text class="label" x="954" y="220">Audio Engine</text>
+  <text class="file" x="954" y="254">offscreen.html</text>
+  <text class="file" x="954" y="280">offscreen.js</text>
+  <text class="body" x="954" y="324">Consumes captured stream</text>
+  <text class="body" x="954" y="350">Runs Web Audio GainNode</text>
+  <text class="body" x="954" y="376">Outputs boosted sound</text>
+
+  <path class="arrow" d="M360 300H478"/>
+  <path class="arrow" d="M792 300H910"/>
+
+  <rect class="card" x="206" y="500" width="868" height="112" rx="12"/>
+  <text class="label" x="238" y="544">Audio path</text>
+  <text class="body" x="238" y="582">Chrome tab audio -> tabCapture stream -> Web Audio GainNode -> speakers/headphones</text>
+  <rect class="badge" x="918" y="524" width="74" height="34" rx="17"/>
+  <text class="badgeText" x="942" y="547">ON</text>
+</svg>

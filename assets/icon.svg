@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Tab Sound Booster icon</title>
+  <desc id="desc">A speaker with sound waves and a boost arrow.</desc>
+  <rect width="128" height="128" rx="24" fill="#0f766e"/>
+  <path d="M28 58h18l25-23c4-4 10-1 10 5v48c0 6-7 9-11 5L46 70H28c-4 0-7-3-7-7v2c0-4 3-7 7-7z" fill="#ecfeff"/>
+  <path d="M89 49c8 8 8 22 0 30" fill="none" stroke="#ccfbf1" stroke-width="8" stroke-linecap="round"/>
+  <path d="M101 36c15 15 15 41 0 56" fill="none" stroke="#99f6e4" stroke-width="7" stroke-linecap="round"/>
+  <path d="M65 81l15-24 8 13 14-24" fill="none" stroke="#facc15" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

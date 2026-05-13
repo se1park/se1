@@ -2,6 +2,14 @@
 
 Chrome extension that boosts the audio of the current tab.
 
+## Visual guide
+
+![Extension map](docs/images/extension-map.svg)
+
+![Popup guide](docs/images/popup-guide.svg)
+
+![Per-tab states](docs/images/per-tab-states.svg)
+
 ## Install locally
 
 1. Open `chrome://extensions`.

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="720" viewBox="0 0 1180 720" role="img" aria-labelledby="title desc">
+  <title id="title">Per-tab state guide</title>
+  <desc id="desc">A visual showing separate boost settings for different browser tabs.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .title { font: 700 40px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .subtitle { font: 400 19px Arial, Helvetica, sans-serif; fill: #607080; }
+      .window { fill: #ffffff; stroke: #d9e0e7; stroke-width: 2; }
+      .bar { fill: #e8edf2; }
+      .tab { fill: #ffffff; stroke: #cbd5df; stroke-width: 2; }
+      .tabActive { fill: #ccfbf1; stroke: #0f766e; stroke-width: 3; }
+      .label { font: 700 18px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .body { font: 400 16px Arial, Helvetica, sans-serif; fill: #405061; }
+      .code { font: 700 16px Consolas, monospace; fill: #0f766e; }
+      .badge { fill: #0f766e; }
+      .badgeText { font: 700 13px Arial, Helvetica, sans-serif; fill: #ffffff; }
+    </style>
+  </defs>
+  <rect class="bg" width="1180" height="720"/>
+  <text class="title" x="56" y="78">Each tab has its own boost state</text>
+  <text class="subtitle" x="56" y="112">Changing one tab does not change the saved gain or ON/OFF state of another tab.</text>
+
+  <rect class="window" x="74" y="170" width="1032" height="410" rx="18"/>
+  <rect class="bar" x="74" y="170" width="1032" height="74" rx="18"/>
+  <rect class="tabActive" x="116" y="198" width="224" height="62" rx="12"/>
+  <rect class="tab" x="352" y="198" width="224" height="62" rx="12"/>
+  <rect class="tab" x="588" y="198" width="224" height="62" rx="12"/>
+
+  <text class="label" x="142" y="234">Music · Tab 101</text>
+  <rect class="badge" x="274" y="211" width="42" height="24" rx="12"/>
+  <text class="badgeText" x="284" y="228">ON</text>
+  <text class="label" x="378" y="234">Video · Tab 102</text>
+  <text class="label" x="614" y="234">Meeting · Tab 103</text>
+
+  <rect class="window" x="132" y="318" width="250" height="154" rx="12"/>
+  <text class="label" x="160" y="356">Tab 101</text>
+  <text class="body" x="160" y="390">Status: boosted</text>
+  <text class="code" x="160" y="424">gain: 2.6x</text>
+
+  <rect class="window" x="464" y="318" width="250" height="154" rx="12"/>
+  <text class="label" x="492" y="356">Tab 102</text>
+  <text class="body" x="492" y="390">Status: stopped</text>
+  <text class="code" x="492" y="424">gain: 1.4x</text>
+
+  <rect class="window" x="796" y="318" width="250" height="154" rx="12"/>
+  <text class="label" x="824" y="356">Tab 103</text>
+  <text class="body" x="824" y="390">Status: boosted</text>
+  <text class="code" x="824" y="424">gain: 3.1x</text>
+
+  <text class="subtitle" x="132" y="535">The service worker stores these records in chrome.storage.session using each tab ID.</text>
+  <text class="subtitle" x="132" y="564">When a tab closes, its boost session is stopped and its state is removed.</text>
+</svg>

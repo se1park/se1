@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-labelledby="title desc">
+  <title id="title">Popup controls guide</title>
+  <desc id="desc">A guide showing each control in the Tab Sound Booster popup.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#0f766e"/>
+    </marker>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .panel { fill: #ffffff; stroke: #d9e0e7; stroke-width: 2; }
+      .title { font: 700 38px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .note { font: 400 18px Arial, Helvetica, sans-serif; fill: #607080; }
+      .h1 { font: 700 20px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .small { font: 400 14px Arial, Helvetica, sans-serif; fill: #607080; }
+      .label { font: 700 18px Arial, Helvetica, sans-serif; fill: #17202a; }
+      .call { font: 700 18px Arial, Helvetica, sans-serif; fill: #0f766e; }
+      .arrow { stroke: #0f766e; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .button { fill: #0f766e; }
+      .buttonText { font: 700 17px Arial, Helvetica, sans-serif; fill: #ffffff; }
+      .input { fill: #ffffff; stroke: #d9e0e7; stroke-width: 2; }
+    </style>
+  </defs>
+  <rect class="bg" width="960" height="720"/>
+  <text class="title" x="56" y="74">Popup controls</text>
+  <text class="note" x="56" y="108">Open the extension on any tab and adjust that tab only.</text>
+
+  <rect class="panel" x="92" y="162" width="340" height="426" rx="18"/>
+  <text class="h1" x="126" y="216">Tab Sound Booster</text>
+  <text class="small" x="126" y="246">Video title · Tab 123</text>
+  <circle cx="394" cy="214" r="8" fill="#16a34a"/>
+
+  <text class="label" x="126" y="314">Boost</text>
+  <rect class="input" x="342" y="292" width="56" height="32" rx="6"/>
+  <text class="call" x="354" y="314">2.0x</text>
+
+  <line x1="126" y1="370" x2="292" y2="370" stroke="#0f766e" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="234" cy="370" r="13" fill="#0f766e"/>
+  <rect class="input" x="318" y="352" width="80" height="38" rx="7"/>
+  <text class="label" x="342" y="377">2.0</text>
+
+  <rect class="button" x="126" y="436" width="272" height="46" rx="8"/>
+  <text class="buttonText" x="244" y="465">Start</text>
+  <text class="small" x="126" y="528">Ready for Tab 123. Each tab is</text>
+  <text class="small" x="126" y="550">controlled separately.</text>
+
+  <path class="arrow" d="M622 214H408"/>
+  <text class="call" x="638" y="220">Green dot means this tab is boosted</text>
+
+  <path class="arrow" d="M622 372H406"/>
+  <text class="call" x="638" y="356">Use slider for quick changes</text>
+  <text class="note" x="638" y="384">The number box also works with</text>
+  <text class="note" x="638" y="410">keyboard and numpad input.</text>
+
+  <path class="arrow" d="M622 458H406"/>
+  <text class="call" x="638" y="464">Start or stop the current tab</text>
+
+  <path class="arrow" d="M622 536H406"/>
+  <text class="call" x="638" y="542">Status text names the active tab</text>
+</svg>
