@@ -15,7 +15,7 @@ async function init() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   activeTabId = tab?.id ?? null;
   tabTitle.textContent = tab?.title
-    ? `${tab.title} · Tab ${activeTabId}`
+    ? `${tab.title} - Tab ${activeTabId}`
     : `Tab ${activeTabId}`;
 
   if (!activeTabId) {
