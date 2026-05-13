@@ -1,15 +1,25 @@
 :root {
   color-scheme: light dark;
   font-family: Arial, Helvetica, sans-serif;
-  --accent: #0f766e;
-  --accent-strong: #115e59;
-  --accent-soft: #ccfbf1;
-  --ink: #17202a;
-  --muted: #667789;
-  --surface: #ffffff;
-  --line: #d9e0e7;
-  --warm: #f97316;
-  --gold: #facc15;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --popover: #18181b;
+  --primary: #fafafa;
+  --primary-foreground: #09090b;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #2dd4bf;
+  --accent-foreground: #042f2e;
+  --destructive: #ef4444;
+  --destructive-foreground: #fef2f2;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #2dd4bf;
+  --radius: 8px;
   --progress: 25%;
 }
 
@@ -20,15 +30,13 @@
 body {
   width: 360px;
   margin: 0;
-  color: var(--ink);
-  background:
-    radial-gradient(circle at top left, rgba(250, 204, 21, 0.24), transparent 34%),
-    linear-gradient(145deg, #f8fafc 0%, #eef6f3 52%, #f7f8fb 100%);
+  color: var(--foreground);
+  background: var(--background);
 }
 
 .popup {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   padding: 16px;
 }
 
@@ -49,18 +57,18 @@ body {
 .logo {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(15, 118, 110, 0.22);
-  border-radius: 8px;
-  background: linear-gradient(145deg, #0f766e, #14b8a6);
-  box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
+  width: 40px;
+  height: 40px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .logo span {
-  width: 18px;
-  height: 18px;
-  border: 4px solid #ecfeff;
+  width: 17px;
+  height: 17px;
+  border: 3px solid currentColor;
   border-left-color: transparent;
   border-bottom-color: transparent;
   border-radius: 50%;
@@ -70,7 +78,7 @@ body {
 .eyebrow,
 .section-label,
 .range-label {
-  color: var(--muted);
+  color: var(--muted-foreground);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0;
@@ -90,11 +98,10 @@ p {
 .tab-card,
 .meter,
 .control {
-  border: 1px solid rgba(217, 224, 231, 0.92);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--card-foreground);
+  background: var(--card);
 }
 
 .tab-card {
@@ -105,7 +112,7 @@ p {
   overflow: hidden;
   max-width: 302px;
   margin-top: 5px;
-  color: var(--ink);
+  color: var(--foreground);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.35;
@@ -119,31 +126,29 @@ p {
   gap: 6px;
   min-height: 30px;
   padding: 6px 9px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted-foreground);
+  background: var(--secondary);
   font-size: 12px;
   font-weight: 700;
 }
 
 .status-pill.active {
-  border-color: rgba(22, 163, 74, 0.35);
-  color: #166534;
-  background: #dcfce7;
+  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .status-dot {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: #a9b4bf;
-  box-shadow: 0 0 0 3px rgba(169, 180, 191, 0.18);
+  background: var(--muted-foreground);
 }
 
 .status-dot.active {
-  background: #16a34a;
-  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.18);
+  background: var(--accent);
 }
 
 .meter {
@@ -157,7 +162,7 @@ p {
 output {
   display: block;
   margin-top: 2px;
-  color: var(--accent-strong);
+  color: var(--foreground);
   font-size: 44px;
   font-weight: 800;
   line-height: 1;
@@ -170,12 +175,12 @@ output {
   height: 86px;
   border-radius: 50%;
   background:
-    radial-gradient(circle, #ffffff 0 57%, transparent 58%),
-    conic-gradient(var(--accent) var(--progress), #e4e9ef 0);
+    radial-gradient(circle, var(--card) 0 57%, transparent 58%),
+    conic-gradient(var(--accent) var(--progress), var(--muted) 0);
 }
 
 .meter-ring span {
-  color: var(--accent-strong);
+  color: var(--accent);
   font-size: 20px;
   font-weight: 800;
 }
@@ -196,12 +201,31 @@ output {
 }
 
 input[type="range"] {
+  appearance: none;
   height: 8px;
   width: 100%;
   border-radius: 999px;
-  accent-color: var(--accent);
-  background: linear-gradient(90deg, var(--accent) var(--progress), #dfe6ee var(--progress));
+  background: linear-gradient(90deg, var(--accent) var(--progress), var(--muted) var(--progress));
   cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--background);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--ring);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--background);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--ring);
 }
 
 .gain-controls {
@@ -214,7 +238,7 @@ input[type="range"] {
 .number-label {
   display: grid;
   gap: 4px;
-  color: var(--muted);
+  color: var(--muted-foreground);
   font-size: 11px;
   font-weight: 700;
 }
@@ -222,13 +246,20 @@ input[type="range"] {
 input[type="number"] {
   width: 100%;
   min-height: 34px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
+  border: 1px solid var(--input);
+  border-radius: calc(var(--radius) - 2px);
   padding: 5px 8px;
-  color: var(--ink);
-  background: var(--surface);
+  color: var(--foreground);
+  background: transparent;
   font-size: 13px;
   font-weight: 700;
+}
+
+input[type="number"]:focus-visible,
+button:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 .actions {
@@ -238,11 +269,10 @@ input[type="number"] {
 button {
   width: 100%;
   min-height: 46px;
-  border: 0;
-  border-radius: 8px;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--accent), #2563eb);
-  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.2);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  color: var(--primary-foreground);
+  background: var(--primary);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -260,9 +290,9 @@ button {
 }
 
 button.secondary {
-  color: #ffffff;
-  background: linear-gradient(135deg, #334155, var(--warm));
-  box-shadow: 0 14px 24px rgba(249, 115, 22, 0.18);
+  border-color: color-mix(in srgb, var(--destructive) 72%, transparent);
+  color: var(--destructive-foreground);
+  background: var(--destructive);
 }
 
 button.secondary .button-icon {
@@ -280,45 +310,38 @@ button:disabled {
 .message {
   min-height: 34px;
   padding: 0 2px;
-  color: var(--muted);
+  color: var(--muted-foreground);
   font-size: 12px;
   line-height: 1.4;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --ink: #eef3f7;
-    --muted: #9dadbe;
-    --surface: #18212c;
-    --line: #314152;
-  }
-
-  body {
-    background:
-      radial-gradient(circle at top left, rgba(250, 204, 21, 0.12), transparent 34%),
-      linear-gradient(145deg, #111827 0%, #10201f 58%, #14181f 100%);
-  }
-
-  .tab-card,
-  .meter,
-  .control,
-  .status-pill {
-    border-color: rgba(49, 65, 82, 0.9);
-    background: rgba(24, 33, 44, 0.82);
-  }
-
-  output,
-  .meter-ring span {
-    color: #5eead4;
+    --background: #fafafa;
+    --foreground: #09090b;
+    --card: #ffffff;
+    --card-foreground: #09090b;
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
   }
 
   .meter-ring {
     background:
-      radial-gradient(circle, #18212c 0 57%, transparent 58%),
-      conic-gradient(#14b8a6 var(--progress), #293545 0);
+      radial-gradient(circle, var(--card) 0 57%, transparent 58%),
+      conic-gradient(var(--accent) var(--progress), var(--muted) 0);
   }
 
-  input[type="number"] {
-    border-color: var(--line);
+  .status-pill.active {
+    color: #0f766e;
+  }
+
+  button.secondary {
+    color: #ffffff;
   }
 }
