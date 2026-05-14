@@ -118,27 +118,47 @@ async function setGain(tabId, gain) {
 async function getState(tabId) {
   const states = await getStoredStates();
   const existing = states[String(tabId)];
-  return existing ?? { active: false, gain: DEFAULT_GAIN };
+  return normalizeStoredState(existing);
 }
 
 async function getStoredStates() {
-  const result = await chrome.storage.session.get(STORAGE_KEY);
-  return result[STORAGE_KEY] ?? {};
+  try {
+    const result = await chrome.storage.session.get(STORAGE_KEY);
+    const states = result[STORAGE_KEY];
+
+    if (isPlainObject(states)) {
+      return states;
+    }
+
+    await chrome.storage.session.set({ [STORAGE_KEY]: {} });
+  } catch (error) {
+    console.warn(error);
+  }
+
+  return {};
 }
 
 async function setStoredState(tabId, state) {
   const states = await getStoredStates();
-  states[String(tabId)] = state;
-  await chrome.storage.session.set({ [STORAGE_KEY]: states });
+  states[String(tabId)] = normalizeStoredState(state);
+  await setStoredStates(states);
 }
 
 async function removeStoredState(tabId, updateTabBadge = true) {
   const states = await getStoredStates();
   delete states[String(tabId)];
-  await chrome.storage.session.set({ [STORAGE_KEY]: states });
+  await setStoredStates(states);
 
   if (updateTabBadge) {
     await updateBadge(tabId, false);
+  }
+}
+
+async function setStoredStates(states) {
+  try {
+    await chrome.storage.session.set({ [STORAGE_KEY]: states });
+  } catch (error) {
+    console.warn(error);
   }
 }
 
@@ -203,6 +223,21 @@ function normalizeGain(gain) {
   }
 
   return Math.min(MAX_GAIN, Math.max(MIN_GAIN, value));
+}
+
+function normalizeStoredState(state) {
+  if (!isPlainObject(state)) {
+    return { active: false, gain: DEFAULT_GAIN };
+  }
+
+  return {
+    active: state.active === true,
+    gain: normalizeGain(state.gain)
+  };
+}
+
+function isPlainObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 async function updateBadgeForTab(tabId) {
