@@ -49,14 +49,25 @@ async function startBoost(tabId, streamId, gain) {
   source.connect(gainNode);
   gainNode.connect(audioContext.destination);
 
+  const session = { audioContext, gainNode, stream, stopping: false };
+
   stream.getAudioTracks().forEach((track) => {
     track.addEventListener("ended", () => {
-      stopBoost(tabId);
-      chrome.runtime.sendMessage({ type: "BOOST_STOPPED", tabId });
+      const currentSession = sessions.get(tabId);
+
+      if (!currentSession || currentSession.stopping) {
+        return;
+      }
+
+      sessions.delete(tabId);
+      closeAudioContext(currentSession.audioContext);
+      chrome.runtime
+        .sendMessage({ type: "BOOST_STOPPED", tabId })
+        .catch(() => {});
     });
   });
 
-  sessions.set(tabId, { audioContext, gainNode, stream });
+  sessions.set(tabId, session);
 }
 
 function stopBoost(tabId) {
@@ -66,8 +77,9 @@ function stopBoost(tabId) {
     return;
   }
 
+  session.stopping = true;
   session.stream.getTracks().forEach((track) => track.stop());
-  session.audioContext.close();
+  closeAudioContext(session.audioContext);
   sessions.delete(tabId);
 }
 
@@ -77,4 +89,12 @@ function setGain(tabId, gain) {
   if (session) {
     session.gainNode.gain.value = gain;
   }
+}
+
+function closeAudioContext(audioContext) {
+  if (audioContext.state === "closed") {
+    return;
+  }
+
+  audioContext.close().catch(() => {});
 }

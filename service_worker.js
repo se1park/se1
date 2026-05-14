@@ -68,6 +68,7 @@ async function cleanupClosedTab(tabId) {
 
 async function startBoost(tabId, gain) {
   assertTabId(tabId);
+  await assertTabExists(tabId);
   const nextGain = normalizeGain(gain);
 
   await ensureOffscreenDocument();
@@ -88,15 +89,20 @@ async function startBoost(tabId, gain) {
 
 async function stopBoost(tabId) {
   assertTabId(tabId);
-  await ensureOffscreenDocument();
-  await sendToOffscreen({ target: "offscreen", type: "STOP_BOOST", tabId });
+  const tabStillExists = await tabExists(tabId);
+  await stopOffscreenIfPresent(tabId);
   await removeStoredState(tabId, false);
-  await updateBadge(tabId, false);
+
+  if (tabStillExists) {
+    await updateBadge(tabId, false);
+  }
+
   return getState(tabId);
 }
 
 async function setGain(tabId, gain) {
   assertTabId(tabId);
+  await assertTabExists(tabId);
   const nextGain = normalizeGain(gain);
   const current = await getState(tabId);
 
@@ -192,11 +198,12 @@ async function ensureOffscreenDocument() {
       url: OFFSCREEN_DOCUMENT,
       reasons: ["USER_MEDIA"],
       justification: "Process captured tab audio with Web Audio."
+    }).finally(() => {
+      creatingOffscreenDocument = null;
     });
   }
 
   await creatingOffscreenDocument;
-  creatingOffscreenDocument = null;
 }
 
 async function hasOffscreenDocument() {
@@ -285,4 +292,10 @@ async function tabExists(tabId) {
 
 function isMissingTabError(error) {
   return error?.message?.startsWith("No tab with id:");
+}
+
+async function assertTabExists(tabId) {
+  if (!(await tabExists(tabId))) {
+    throw new Error("Target tab is no longer available.");
+  }
 }

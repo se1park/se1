@@ -16,7 +16,7 @@ const GAIN_STEP = 0.1;
 let activeTabId = null;
 let state = { active: false, gain: Number(gainInput.value) };
 
-init();
+init().catch(showError);
 
 document.addEventListener(
   "wheel",
@@ -27,7 +27,7 @@ document.addEventListener(
 
     event.preventDefault();
     const direction = event.deltaY < 0 ? 1 : -1;
-    updateGain(roundGain(state.gain + direction * GAIN_STEP));
+    updateGain(roundGain(state.gain + direction * GAIN_STEP)).catch(showError);
   },
   { passive: false }
 );
@@ -57,15 +57,15 @@ async function init() {
 }
 
 gainInput.addEventListener("input", () => {
-  updateGain(Number(gainInput.value));
+  updateGain(Number(gainInput.value)).catch(showError);
 });
 
 gainNumber.addEventListener("input", () => {
-  updateGain(Number(gainNumber.value));
+  updateGain(Number(gainNumber.value)).catch(showError);
 });
 
 gainNumber.addEventListener("change", () => {
-  updateGain(clampGain(Number(gainNumber.value)));
+  updateGain(clampGain(Number(gainNumber.value))).catch(showError);
 });
 
 toggleButton.addEventListener("click", async () => {
@@ -116,6 +116,10 @@ function setMessage(text) {
   message.textContent = text;
 }
 
+function showError(error) {
+  setMessage(error.message || "Something went wrong.");
+}
+
 async function updateGain(gain) {
   if (!Number.isFinite(gain)) {
     return;
@@ -151,6 +155,10 @@ function sendToServiceWorker(payload) {
   }
 
   return chrome.runtime.sendMessage(payload).then((response) => {
+    if (!response) {
+      throw new Error("Extension service worker did not respond.");
+    }
+
     if (response?.error) {
       throw new Error(response.error);
     }
