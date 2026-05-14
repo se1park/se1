@@ -7,12 +7,16 @@ const STORAGE_KEY = "tabBoostStates";
 let creatingOffscreenDocument = null;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.target === "offscreen") {
+    return false;
+  }
+
   handleMessage(message, sender)
     .then(sendResponse)
     .catch((error) => {
       sendResponse({
         active: false,
-        gain: message.gain ?? DEFAULT_GAIN,
+        gain: message?.gain ?? DEFAULT_GAIN,
         error: error.message
       });
     });
@@ -21,17 +25,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 chrome.tabs.onRemoved.addListener((tabId) => {
-  chrome.runtime.sendMessage({ target: "offscreen", type: "STOP_BOOST", tabId });
-  removeStoredState(tabId);
+  cleanupClosedTab(tabId).catch((error) => console.warn(error));
 });
 
 chrome.tabs.onActivated.addListener(({ tabId }) => {
-  updateBadgeForTab(tabId);
+  updateBadgeForTab(tabId).catch((error) => console.warn(error));
 });
 
 async function handleMessage(message) {
   if (!message?.type) {
-    throw new Error("알 수 없는 요청입니다.");
+    throw new Error("Unknown request.");
   }
 
   if (message.type === "GET_STATE") {
@@ -55,7 +58,12 @@ async function handleMessage(message) {
     return getState(message.tabId);
   }
 
-  throw new Error("지원하지 않는 요청입니다.");
+  throw new Error("Unsupported request.");
+}
+
+async function cleanupClosedTab(tabId) {
+  await stopOffscreenIfPresent(tabId);
+  await removeStoredState(tabId, false);
 }
 
 async function startBoost(tabId, gain) {
@@ -83,7 +91,6 @@ async function stopBoost(tabId) {
   await ensureOffscreenDocument();
   await sendToOffscreen({ target: "offscreen", type: "STOP_BOOST", tabId });
   await removeStoredState(tabId);
-  await updateBadge(tabId, false);
   return getState(tabId);
 }
 
@@ -124,29 +131,38 @@ async function setStoredState(tabId, state) {
   await chrome.storage.session.set({ [STORAGE_KEY]: states });
 }
 
-async function removeStoredState(tabId) {
+async function removeStoredState(tabId, updateTabBadge = true) {
   const states = await getStoredStates();
   delete states[String(tabId)];
   await chrome.storage.session.set({ [STORAGE_KEY]: states });
-  await updateBadge(tabId, false);
+
+  if (updateTabBadge) {
+    await updateBadge(tabId, false);
+  }
 }
 
 async function sendToOffscreen(message) {
   const response = await chrome.runtime.sendMessage(message);
 
   if (!response?.ok) {
-    throw new Error(response?.error || "오디오 처리를 시작하지 못했습니다.");
+    throw new Error(response?.error || "Could not start audio processing.");
+  }
+}
+
+async function stopOffscreenIfPresent(tabId) {
+  if (!(await hasOffscreenDocument())) {
+    return;
+  }
+
+  try {
+    await sendToOffscreen({ target: "offscreen", type: "STOP_BOOST", tabId });
+  } catch (error) {
+    console.warn(error);
   }
 }
 
 async function ensureOffscreenDocument() {
-  const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT);
-  const contexts = await chrome.runtime.getContexts({
-    contextTypes: ["OFFSCREEN_DOCUMENT"],
-    documentUrls: [offscreenUrl]
-  });
-
-  if (contexts.length > 0) {
+  if (await hasOffscreenDocument()) {
     return;
   }
 
@@ -162,9 +178,19 @@ async function ensureOffscreenDocument() {
   creatingOffscreenDocument = null;
 }
 
+async function hasOffscreenDocument() {
+  const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT);
+  const contexts = await chrome.runtime.getContexts({
+    contextTypes: ["OFFSCREEN_DOCUMENT"],
+    documentUrls: [offscreenUrl]
+  });
+
+  return contexts.length > 0;
+}
+
 function assertTabId(tabId) {
   if (!Number.isInteger(tabId)) {
-    throw new Error("대상 탭을 찾을 수 없습니다.");
+    throw new Error("Could not find the target tab.");
   }
 }
 
@@ -188,12 +214,16 @@ async function updateBadge(tabId, active) {
     return;
   }
 
-  await chrome.action.setBadgeText({
-    tabId,
-    text: active ? "ON" : ""
-  });
-  await chrome.action.setBadgeBackgroundColor({
-    tabId,
-    color: "#0f766e"
-  });
+  try {
+    await chrome.action.setBadgeText({
+      tabId,
+      text: active ? "ON" : ""
+    });
+    await chrome.action.setBadgeBackgroundColor({
+      tabId,
+      color: "#0f766e"
+    });
+  } catch (error) {
+    console.warn(error);
+  }
 }
