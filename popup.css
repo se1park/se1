@@ -20,7 +20,7 @@
   --input: #27272a;
   --ring: #2dd4bf;
   --radius: 8px;
-  --progress: 25%;
+  --progress: 11.11%;
 }
 
 * {
@@ -28,7 +28,7 @@
 }
 
 body {
-  width: 360px;
+  width: 372px;
   margin: 0;
   color: var(--foreground);
   background: var(--background);
@@ -36,7 +36,7 @@ body {
 
 .popup {
   display: grid;
-  gap: 12px;
+  gap: 10px;
   padding: 16px;
 }
 
@@ -105,7 +105,7 @@ p {
 }
 
 .tab-card {
-  padding: 13px 14px;
+  padding: 12px 14px;
 }
 
 #tabTitle {
@@ -153,9 +153,9 @@ p {
 
 .meter {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 92px;
+  grid-template-columns: minmax(0, 1fr) 96px;
   align-items: center;
-  min-height: 120px;
+  min-height: 128px;
   padding: 16px;
 }
 
@@ -163,9 +163,17 @@ output {
   display: block;
   margin-top: 2px;
   color: var(--foreground);
-  font-size: 44px;
+  font-size: 46px;
   font-weight: 800;
   line-height: 1;
+}
+
+.meter-description {
+  max-width: 188px;
+  margin-top: 8px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .meter-ring {
@@ -187,7 +195,7 @@ output {
 
 .control {
   display: grid;
-  gap: 12px;
+  gap: 14px;
   padding: 14px;
 }
 
@@ -230,7 +238,7 @@ input[type="range"]::-moz-range-thumb {
 
 .gain-controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 78px;
+  grid-template-columns: minmax(0, 1fr) 84px;
   align-items: center;
   gap: 12px;
 }
@@ -253,6 +261,7 @@ input[type="number"] {
   background: transparent;
   font-size: 13px;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 input[type="number"]:focus-visible,
@@ -308,7 +317,7 @@ button:disabled {
 }
 
 .message {
-  min-height: 34px;
+  min-height: 32px;
   padding: 0 2px;
   color: var(--muted-foreground);
   font-size: 12px;

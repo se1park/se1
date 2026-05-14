@@ -1,5 +1,7 @@
 const OFFSCREEN_DOCUMENT = "offscreen.html";
 const DEFAULT_GAIN = 2;
+const MIN_GAIN = 1;
+const MAX_GAIN = 10;
 const STORAGE_KEY = "tabBoostStates";
 
 let creatingOffscreenDocument = null;
@@ -173,7 +175,7 @@ function normalizeGain(gain) {
     return DEFAULT_GAIN;
   }
 
-  return Math.min(5, Math.max(1, value));
+  return Math.min(MAX_GAIN, Math.max(MIN_GAIN, value));
 }
 
 async function updateBadgeForTab(tabId) {

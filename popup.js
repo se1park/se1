@@ -9,6 +9,10 @@ const statusPill = document.querySelector("#statusPill");
 const statusText = document.querySelector("#statusText");
 const tabTitle = document.querySelector("#tabTitle");
 
+const MIN_GAIN = 1;
+const MAX_GAIN = 10;
+const GAIN_STEP = 0.1;
+
 let activeTabId = null;
 let state = { active: false, gain: Number(gainInput.value) };
 
@@ -23,7 +27,7 @@ document.addEventListener(
 
     event.preventDefault();
     const direction = event.deltaY < 0 ? 1 : -1;
-    updateGain(roundGain(state.gain + direction * 0.1));
+    updateGain(roundGain(state.gain + direction * GAIN_STEP));
   },
   { passive: false }
 );
@@ -92,7 +96,10 @@ function render() {
   gainNumber.value = state.gain.toFixed(1);
   gainValue.value = `${state.gain.toFixed(1)}x`;
   meterValue.textContent = state.gain.toFixed(1);
-  document.documentElement.style.setProperty("--progress", `${((state.gain - 1) / 4) * 100}%`);
+  document.documentElement.style.setProperty(
+    "--progress",
+    `${((state.gain - MIN_GAIN) / (MAX_GAIN - MIN_GAIN)) * 100}%`
+  );
   toggleButton.querySelector("span:last-child").textContent = state.active ? "Stop boosting" : "Start boosting";
   toggleButton.classList.toggle("secondary", state.active);
   statusDot.classList.toggle("active", state.active);
@@ -128,7 +135,7 @@ async function updateGain(gain) {
 }
 
 function clampGain(gain) {
-  return Math.min(5, Math.max(1, gain));
+  return Math.min(MAX_GAIN, Math.max(MIN_GAIN, gain));
 }
 
 function roundGain(gain) {
