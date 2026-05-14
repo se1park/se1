@@ -14,6 +14,20 @@ let state = { active: false, gain: Number(gainInput.value) };
 
 init();
 
+document.addEventListener(
+  "wheel",
+  (event) => {
+    if (!activeTabId) {
+      return;
+    }
+
+    event.preventDefault();
+    const direction = event.deltaY < 0 ? 1 : -1;
+    updateGain(roundGain(state.gain + direction * 0.1));
+  },
+  { passive: false }
+);
+
 async function init() {
   if (!globalThis.chrome?.tabs) {
     activeTabId = 123;
@@ -115,6 +129,10 @@ async function updateGain(gain) {
 
 function clampGain(gain) {
   return Math.min(5, Math.max(1, gain));
+}
+
+function roundGain(gain) {
+  return Math.round(gain * 10) / 10;
 }
 
 function sendToServiceWorker(payload) {
