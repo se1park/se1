@@ -54,7 +54,7 @@ async function handleMessage(message) {
   }
 
   if (message.type === "BOOST_STOPPED") {
-    await removeStoredState(message.tabId);
+    await removeStoredState(message.tabId, false);
     return getState(message.tabId);
   }
 
@@ -90,7 +90,8 @@ async function stopBoost(tabId) {
   assertTabId(tabId);
   await ensureOffscreenDocument();
   await sendToOffscreen({ target: "offscreen", type: "STOP_BOOST", tabId });
-  await removeStoredState(tabId);
+  await removeStoredState(tabId, false);
+  await updateBadge(tabId, false);
   return getState(tabId);
 }
 
@@ -214,6 +215,10 @@ async function updateBadge(tabId, active) {
     return;
   }
 
+  if (!(await tabExists(tabId))) {
+    return;
+  }
+
   try {
     await chrome.action.setBadgeText({
       tabId,
@@ -224,6 +229,25 @@ async function updateBadge(tabId, active) {
       color: "#0f766e"
     });
   } catch (error) {
-    console.warn(error);
+    if (!isMissingTabError(error)) {
+      console.warn(error);
+    }
   }
+}
+
+async function tabExists(tabId) {
+  try {
+    await chrome.tabs.get(tabId);
+    return true;
+  } catch (error) {
+    if (!isMissingTabError(error)) {
+      console.warn(error);
+    }
+
+    return false;
+  }
+}
+
+function isMissingTabError(error) {
+  return error?.message?.startsWith("No tab with id:");
 }
